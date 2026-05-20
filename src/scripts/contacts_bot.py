@@ -3,6 +3,7 @@ from functools import wraps
 from pathlib import Path
 
 from src.record import Record
+from src.utils.address_book_serializer import AddressBookSerializer
 
 if __name__ == "__main__":
     sys.path.append(str(Path(__file__).parent[3].absolute()))
@@ -25,6 +26,8 @@ COMMAND_MESSAGES = {
     "HELLO": "How can I help you?",
 }
 
+SERIALIZER_PATH = "addressbook.pkl"
+
 
 def input_error(func):
     """
@@ -37,6 +40,29 @@ def input_error(func):
             return func(*args, **kwargs)
         except (ValueError, TypeError, IndexError, KeyError) as e:
             return str(e)
+
+    return wrapper
+
+
+def serializes(func, object, serializer=None):
+    """
+    Decorator to serialize the address book.
+
+    Args:
+        func (Callable): The function to decorate.
+        object (Any): The object to serialize.
+        serializer (AddressBookSerializer | None): The serializer to use.
+
+    Returns:
+        Callable: The decorated function.
+    """
+
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        result = func(*args, **kwargs)
+        if serializer:
+            serializer.serialize(object)
+        return result
 
     return wrapper
 
@@ -272,7 +298,12 @@ def exit(_: AddressBook, arguments: list[str] = []) -> str:
     return COMMAND_MESSAGES["GOOD_BYE"]
 
 
-def handle_command(book: AddressBook, command: str, arguments: list[str]) -> str:
+def handle_command(
+    book: AddressBook,
+    command: str,
+    arguments: list[str],
+    serializer: AddressBookSerializer = None,
+) -> str:
     """
     Handle the command.
 
@@ -286,12 +317,12 @@ def handle_command(book: AddressBook, command: str, arguments: list[str]) -> str
     """
     commands = {
         "hello": hello,
-        "add": add_contact,
-        "update": update_contact,
+        "add": serializes(add_contact, book, serializer),
+        "update": serializes(update_contact, book, serializer),
         "phone": show_phone,
         "all": show_all,
-        "add-birthday": add_birthday,
-        "show-birthday": show_birthday,
+        "add-birthday": serializes(add_birthday, book, serializer),
+        "show-birthday": serializes(show_birthday, book, serializer),
         "birthdays": birthdays,
         "exit": exit,
         "close": exit,
@@ -307,11 +338,14 @@ def main() -> None:
     """
     Main function.
     """
-    book: AddressBook = AddressBook()
+    serializer: AddressBookSerializer = AddressBookSerializer(
+        SERIALIZER_PATH, lambda message: print(message)
+    )
+    book: AddressBook = serializer.deserialize()
     while True:
         line = input()
         command, arguments = parse_input(line)
-        response = handle_command(book, command, arguments)
+        response = handle_command(book, command, arguments, serializer)
         print(response)
         if command in ["exit", "close"]:
             break
