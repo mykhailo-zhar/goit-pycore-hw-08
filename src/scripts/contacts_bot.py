@@ -322,7 +322,7 @@ def handle_command(
         "phone": show_phone,
         "all": show_all,
         "add-birthday": serializes(add_birthday, book, serializer),
-        "show-birthday": serializes(show_birthday, book, serializer),
+        "show-birthday": show_birthday,
         "birthdays": birthdays,
         "exit": exit,
         "close": exit,
