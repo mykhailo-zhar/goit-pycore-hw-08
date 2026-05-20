@@ -65,3 +65,12 @@ def test_deserialize_address_book_with_permissions_(serializer, capsys):
     out = capsys.readouterr().out
     assert len(deserialized_address_book.data) == 0
     assert "Failed to deserialize address book from" in out
+
+
+def test_serialize_address_book_with_permissions_(serializer, capsys):
+    file = Path(serializer.file_path)
+    file.write_text("test", encoding="utf-8")
+    file.chmod(0o000)
+    serializer.serialize(AddressBook())
+    out = capsys.readouterr().out
+    assert "Failed to serialize address book to" in out

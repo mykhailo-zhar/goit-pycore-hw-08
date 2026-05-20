@@ -42,7 +42,6 @@ class AddressBookSerializer:
             self.send_error_message(
                 f"Warning: Failed to serialize address book to {self.file_path}"
             )
-            pickle.dump(address_book, f)
 
     def deserialize(self) -> AddressBook:
         """
