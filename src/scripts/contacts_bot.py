@@ -116,7 +116,6 @@ def add_contact(book: AddressBook, arguments: list[str]) -> str:
     if len(arguments) != 2:
         raise ValueError(COMMAND_MESSAGES["INVALID_COMMAND"])
     name, phone = arguments
-    record = Record(name)
     if record := book.find_record(name):
         record.add_phone(phone)
     else:
