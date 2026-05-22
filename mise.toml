@@ -35,7 +35,7 @@ run = "pytest tests/"
 
 [tasks.lint]
 description = "Lint the code"
-run = "ruff lint src/"
+run = "ruff check ."
 
 [tasks.info]
 description = "Print project information"
