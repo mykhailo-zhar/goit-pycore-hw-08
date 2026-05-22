@@ -53,3 +53,13 @@ run = "sphinx-apidoc -o docs/source src/ && sphinx-apidoc -o docs/source tests/"
 alias = "bd"
 description = "Build HTML documentation from the reST files"
 run = "make html"
+
+[tasks.pre-commit-install]
+description = "Install pre-commit hooks"
+run = "pre-commit install"
+alias = "pci"
+
+[tasks.pre-commit-run]
+description = "Run pre-commit hooks"
+run = "pre-commit run --all-files"  
+alias = "pcr"
