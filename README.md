@@ -52,7 +52,7 @@ The default storage file is **`addressbook.pkl`** in the current working directo
 
 1. `main()` builds `AddressBookSerializer("addressbook.pkl", print)` and calls `deserialize()` before the REPL loop.
 2. The `serializes` decorator wraps handlers that change data and calls `serializer.serialize(book)` after a successful command.
-3. Commands wrapped with `serializes` (save after success): `add`, `update`, `add-birthday`, `show-birthday`. Read-only commands (`hello`, `phone`, `all`, `birthdays`) do not save.
+3. Commands wrapped with `serializes` (save after success): `add`, `update`, `add-birthday`. Read-only commands (`hello`, `phone`, `all`, `birthdays`, `show-birthday`) do not save.
 4. `exit` / `close` end the session without an extra save (data was already written on the last mutating command).
 
 To use the serializer outside the bot:
