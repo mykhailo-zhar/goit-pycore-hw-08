@@ -6,6 +6,7 @@ fields, contact record, address book container, birthday processing helper, and 
 serializer.
 
 .. mermaid::
+  
   classDiagram
     direction TB
   
