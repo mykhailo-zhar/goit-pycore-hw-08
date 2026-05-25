@@ -22,7 +22,7 @@ Tooling around the project (unchanged):
 
 ## Run the bot
 
-From the repository root (after `uv sync`):
+From the repository root (after [installing the project](#install-the-project)):
 
 ```bash
 uv run python main.py
@@ -91,32 +91,62 @@ Tests: [`tests/address_book/test_serializer.py`](tests/address_book/test_seriali
 
 Python is pinned via [mise.toml](mise.toml) (default **3.12**, overridable with `PYTHON_VERSION`). The repo also carries [.python-version](.python-version) for tooling that reads it.
 
-## Quick start
+## Install the project
 
-1. **Trust and install tools** (from the repo root):
+From the repository root:
+
+1. **Clone the repository** (if you have not already):
+
+   ```bash
+   git clone <repository-url>
+   cd goit-pycore-hw-08
+   ```
+
+2. **Trust and install runtime tools** with [mise](https://mise.jdx.dev/):
 
    ```bash
    mise trust
    mise install
    ```
 
-   This installs **Python**, **uv**, and **ruff**, and with `python.uv_venv_auto` manages [.venv](.venv).
+   This installs **Python**, **uv**, and **ruff**. With `python.uv_venv_auto` in [mise.toml](mise.toml), mise also creates and activates [.venv](.venv) when you are in the project directory.
 
-2. **Install dependencies** (from [pyproject.toml](pyproject.toml) + [uv.lock](uv.lock)):
+3. **Install Python dependencies** from [pyproject.toml](pyproject.toml) and [uv.lock](uv.lock):
 
    ```bash
    uv sync
    ```
 
-   Equivalent: `mise run install-dependencies` (alias `mise run id` per [mise.toml](mise.toml)).
+   Equivalent: `mise run install-dependencies` (alias `mise run id`).
 
-3. **Add a new dependency** (updates `pyproject.toml` and `uv.lock`):
+4. **Optional — pre-commit hooks** (for local lint/format checks before commits):
 
    ```bash
-   uv add <package>
+   mise run pre-commit-install
    ```
 
-   Or use the mise task (see `mise run install --help` for argument passing on your mise version).
+5. **Verify the install**:
+
+   ```bash
+   mise run test
+   ```
+
+   You should see pytest pass. After that, you can [run the bot](#run-the-bot).
+
+**Without mise:** install Python **3.12+** and [uv](https://docs.astral.sh/uv/) yourself, then run `uv sync` from the repo root. Use `uv run` for commands below (for example `uv run pytest tests/`).
+
+## Quick start
+
+After [installing the project](#install-the-project):
+
+- **Run the bot:** `uv run python main.py` (see [Run the bot](#run-the-bot)).
+- **Add a dependency** (updates `pyproject.toml` and `uv.lock`):
+
+  ```bash
+  uv add <package>
+  ```
+
+  Or use the mise task (see `mise run install --help` for argument passing on your mise version).
 
 ## Layout
 
@@ -140,7 +170,7 @@ After `sphinx-apidoc` adds `.rst` files under [docs/source](docs/source), includ
 
 ## Workflow
 
-1. Configure mise and run **`uv sync`**.
+1. [Install the project](#install-the-project) (mise + **`uv sync`**).
 2. Implement code under **`src/`** and tests under **`tests/`**, using docstrings where useful.
 3. Run **`mise run lint`** and **`mise run test`**.
 4. Run **`mise run generate-docs`** then **`mise run build-docs`** when you want refreshed API documentation.
