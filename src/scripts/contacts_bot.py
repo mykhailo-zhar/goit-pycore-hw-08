@@ -327,7 +327,7 @@ def handle_command(
         "close": exit,
     }
 
-    return commands.get(command, COMMAND_MESSAGES["INVALID_COMMAND"])(book, arguments)
+    return commands.get(command, lambda _, __: COMMAND_MESSAGES["INVALID_COMMAND"])(book, arguments)
 
 
 def main() -> None:
