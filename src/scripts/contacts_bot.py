@@ -327,10 +327,7 @@ def handle_command(
         "close": exit,
     }
 
-    if command not in commands:
-        return COMMAND_MESSAGES["INVALID_COMMAND"]
-
-    return commands[command](book, arguments)
+    return commands.get(command, lambda _, __: COMMAND_MESSAGES["INVALID_COMMAND"])(book, arguments)
 
 
 def main() -> None:
